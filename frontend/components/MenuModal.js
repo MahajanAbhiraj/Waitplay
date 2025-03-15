@@ -1,4 +1,7 @@
+"use client"; 
+
 import React from "react";
+import Image from "next/image"; 
 
 const MenuModal = ({ show, onClose, onSave, formData, handleInputChange }) => {
   if (!show) return null;
@@ -10,9 +13,7 @@ const MenuModal = ({ show, onClose, onSave, formData, handleInputChange }) => {
         <form onSubmit={onSave}>
           <div className="grid grid-cols-2 gap-6 mb-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Title
-              </label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Title</label>
               <input
                 type="text"
                 name="title"
@@ -23,9 +24,7 @@ const MenuModal = ({ show, onClose, onSave, formData, handleInputChange }) => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Description
-              </label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
               <input
                 type="text"
                 name="description"
@@ -35,39 +34,36 @@ const MenuModal = ({ show, onClose, onSave, formData, handleInputChange }) => {
               />
             </div>
           </div>
-      <div className="grid grid-cols-2 gap-6 mb-4  items-center">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Image
-            </label>
-            <input
-              type="file"
-              name="image"
-              onChange={(e) => {
-                const file = e.target.files[0]; 
-                handleInputChange({ target: { name: "image", value: file } }); 
-              }}
-              className="block w-full p-2 border rounded-md"
-            />
-          </div>
 
-        <div className="flex items-center">
-          <input
-            type="checkbox"
-            name="isVeg"
-            checked={formData.isVeg}
-            onChange={handleInputChange}
-            className="mr-2"
-          />
-          <label className="text-sm font-medium text-gray-700">Is Veg</label>
-        </div>
-      </div>
+          <div className="grid grid-cols-2 gap-6 mb-4 items-center">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Image</label>
+              <input
+                type="file"
+                name="image"
+                onChange={(e) => {
+                  const file = e.target.files[0]; 
+                  handleInputChange({ target: { name: "image", value: file } });
+                }}
+                className="block w-full p-2 border rounded-md"
+              />
+            </div>
+
+            <div className="flex items-center">
+              <input
+                type="checkbox"
+                name="isVeg"
+                checked={formData.isVeg}
+                onChange={handleInputChange}
+                className="mr-2"
+              />
+              <label className="text-sm font-medium text-gray-700">Is Veg</label>
+            </div>
+          </div>
 
           <div className="grid grid-cols-2 gap-6 mb-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Half Price
-              </label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Half Price</label>
               <input
                 type="number"
                 name="halfPrice"
@@ -77,9 +73,7 @@ const MenuModal = ({ show, onClose, onSave, formData, handleInputChange }) => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Full Price
-              </label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Full Price</label>
               <input
                 type="number"
                 name="fullPrice"
@@ -88,13 +82,11 @@ const MenuModal = ({ show, onClose, onSave, formData, handleInputChange }) => {
                 className="block w-full p-2 border rounded-md"
               />
             </div>
-          
           </div>
+
           <div className="grid grid-cols-2 gap-6 mb-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Category
-              </label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
               <input
                 type="text"
                 name="category"
@@ -104,9 +96,7 @@ const MenuModal = ({ show, onClose, onSave, formData, handleInputChange }) => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Preparation time
-              </label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Preparation Time</label>
               <input
                 type="number"
                 name="prepTime"
@@ -115,8 +105,8 @@ const MenuModal = ({ show, onClose, onSave, formData, handleInputChange }) => {
                 className="block w-full p-2 border rounded-md"
               />
             </div>
-            
           </div>
+
           <div className="flex justify-end space-x-4">
             <button
               type="button"
