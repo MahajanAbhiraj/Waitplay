@@ -1,0 +1,131 @@
+model Admin {
+  id              String   @id @default(auto()) @map("_id") @test.ObjectId // MongoDB ObjectId
+  name            String
+  email           String   @unique
+  password        String
+  phoneNumber     String   @unique
+  location        String?  
+  registeredDate  DateTime? 
+  restaurantName  String?  
+  restaurantId    String? 
+  role            String
+
+  restaurant      Restaurant? @relation(fields: [restaurantId], references: [id], onDelete: SetNull)
+}
+
+model Notification {
+  id           String   @id @default(auto()) @map("_id") @test.ObjectId
+  eventName    String
+  description  String
+  time         DateTime @default(now()) // Equivalent to `default: Date.now`
+  read         Boolean  @default(false)
+  restaurantId String
+
+  restaurant   Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+}
+
+model OrderItem {
+  id       String  @id @default(auto()) @map("_id") @test.ObjectId
+  name     String? 
+  price    Float?  
+  quantity Int?    
+}
+
+model Orderlog {
+  id         String    @id @default(auto()) @map("_id") @test.ObjectId
+  userid     String?   
+  tableId    String?   
+  totalPrice Float    
+  createdAt  DateTime? 
+  orderType  String   
+  resId      String?   
+  ratingId   String?   
+
+  items      OrderItem[] @relation(references: [id]) 
+
+  user       User?       @relation(fields: [userid], references: [id], onDelete: SetNull)
+  table      Table?      @relation(fields: [tableId], references: [id], onDelete: SetNull)
+  restaurant Restaurant? @relation(fields: [resId], references: [id], onDelete: SetNull)
+  rating     Rating?     @relation(fields: [ratingId], references: [id], onDelete: SetNull)
+}
+
+model Order {
+  id         String      @id @default(auto()) @map("_id") @test.ObjectId
+  tableId    String?    
+  totalPrice Float      
+
+  items      OrderItem[] @relation(references: [id]) 
+
+  table      Table?      @relation(fields: [tableId], references: [id], onDelete: SetNull)
+}
+
+model Requests {
+  id               String   @id @default(auto()) @map("_id") @test.ObjectId
+  tableNo          Int      
+  tableDescription String?  
+  restaurantId     String   
+  restaurantName   String   
+  time            DateTime @default(now()) 
+}
+
+model Restaurant {
+  id       String   @id @default(auto()) @map("_id") @test.ObjectId
+  name     String   
+  location String?  
+
+  tables   Table[]    @relation(references: [id]) 
+  menu     MenuItem[] @relation(references: [id]) 
+  orders   Order[]    @relation(references: [id]) 
+}
+
+model Table {
+  id           String  @id @default(auto()) @map("_id") @test.ObjectId
+  tableId      Int     
+  description  String? 
+  restaurantId String  
+  qrData       String  
+  isAvailable  Boolean @default(true) 
+
+  restaurant   Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id               String   @id @default(auto()) @map("_id") @test.ObjectId // MongoDB ObjectId
+  name             String   
+  email            String   @unique 
+  password         String   
+  mobileNumber     String   @unique 
+  restaurantVisits RestaurantVisit[]
+}
+
+model RestaurantVisit {
+  id          String   @id @default(auto()) @map("_id") @test.ObjectId
+  userId      String   
+  restaurant  Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+  restaurantId String
+  orders      Order[]  @relation(references: [id])
+
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Rating {
+  id          String   @id @default(auto()) @map("_id") @test.ObjectId// MongoDB ObjectId
+  orderId     String
+  resId       String
+  totalRating Int
+  quality     Int
+  service     Int
+  pricing     Int
+  createdAt   DateTime @default(now())
+
+  order       Orderlog  @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  restaurant  Restaurant @relation(fields: [resId], references: [id], onDelete: Cascade)
+}
+
+
+
+
+
+
+
+

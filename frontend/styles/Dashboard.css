@@ -1,0 +1,64 @@
+.row1 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); 
+    gap: 2rem; 
+}
+
+.box {
+    background: linear-gradient(to bottom, #2563eb, #9333ea);
+    border-radius: 10px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    color: white;
+    text-align: center;
+  }
+.box1{
+    height: 180px;
+}
+
+.box22 {
+  background: linear-gradient(to bottom, #2563eb, #9333ea);
+  border-radius: 10px;
+  padding: 0.5rem;
+  padding-right: 1rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  color: white;
+}
+
+.row2{
+    display: grid;
+    grid-template-columns: 60% 40%; 
+    gap: 1rem;
+}
+
+.revin{
+    background-color:#264391;
+    border-radius: 7px;
+    height: 160px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+} 
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+  
+  th, td {
+    padding: 3px 4px;
+    text-align: left;
+  }
+  
+  tbody tr {
+    border-radius: 8px;
+    transition: background-color 0.3s;
+  }
+
+  td:last-child {
+    font-weight: bold;
+    color: black;
+    border-radius: 5px; /* Green for Total Revenue */
+  }
+  

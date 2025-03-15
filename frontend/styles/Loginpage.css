@@ -1,0 +1,99 @@
+/* General Container */
+.loginpage-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    color: #333;
+    background-image: url('../public/images/loginbackground.jpg');
+    background-size: cover; 
+    background-position: center; 
+    background-repeat: no-repeat;
+  }
+  
+  .loginpage-form {
+      background-color: #ffffffb1;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      padding: 30px;
+      border-radius: 10px;
+      max-width: 400px;
+  }
+  .imageholder{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .loginpage-title {
+    font-size: 1.8rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-align: center;
+    color: #333;
+  }
+  
+  .loginpage-form-group {
+    margin-bottom: 15px;
+  }
+  
+  .loginpage-label {
+    display: block;
+    font-size: 1rem;
+    margin-bottom: 5px;
+    color: #555;
+  }
+  
+  .loginpage-input {
+    width: 100%;
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid #ccccccc6;
+    border-radius: 5px;
+    outline: none;
+    transition: border-color 0.3s;
+  }
+  
+  .loginpage-input:focus {
+    border-color: #4caf50;
+  }
+  
+  .loginpage-error-message {
+    color: #ff4d4d;
+    font-size: 0.9rem;
+    margin-top: 5px;
+  }
+  
+  .loginpage-success-message {
+    color: #4caf50;
+    font-size: 0.9rem;
+    margin-top: 5px;
+  }
+  
+  .loginpage-login-button {
+    width: 100%;
+    padding: 10px;
+    font-size: 1rem;
+    color: #fff;
+    background-color: #4caf50;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  .loginpagelogo{
+    width: 120px;
+    height: 120px;
+    border-radius: 20%; 
+    object-fit: cover; 
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .loginpage-login-button:hover {
+    background-color: #29612c;
+  }
+  
+  .loginpage-login-button:active {
+    background-color: #3e8e41;
+  }
+  
