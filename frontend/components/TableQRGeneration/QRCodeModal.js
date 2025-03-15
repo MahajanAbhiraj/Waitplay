@@ -1,5 +1,5 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable react/prop-types */
+"use client"; // Ensures it runs on the client in Next.js App Router
+
 import React, { useRef } from "react";
 import QRCode from "react-qr-code";
 import html2canvas from "html2canvas";
@@ -30,7 +30,7 @@ const QRCodeModal = ({ qrData, onClose }) => {
     const pdf = new jsPDF({
       orientation: "portrait",
       unit: "px",
-      format: [200, 300], 
+      format: [200, 300],
     });
 
     pdf.addImage(imgData, "PNG", 0, 0, 200, 300);
@@ -60,7 +60,7 @@ const QRCodeModal = ({ qrData, onClose }) => {
               fontSize: "18px",
               fontWeight: "bold",
               marginBottom: "5px",
-              color: "#FFD700", 
+              color: "#FFD700",
             }}
           >
             WAITPLAY
@@ -70,21 +70,25 @@ const QRCodeModal = ({ qrData, onClose }) => {
             Every Wait Is Worth It!
           </p>
 
-            <p
-              style={{
-                fontSize: "14px",
-                fontWeight: "bold",
-                marginBottom: "10px",
-                color: "#ffffff",
-              }}
-            >
-              Table ID: {tableId}
-            </p>
+          <p
+            style={{
+              fontSize: "14px",
+              fontWeight: "bold",
+              marginBottom: "10px",
+              color: "#ffffff",
+            }}
+          >
+            Table ID: {tableId}
+          </p>
 
           <QRCode
             value={qrData}
             size={150}
-            style={{ margin: "0 auto", backgroundColor: "#fff", padding: "10px" }}
+            style={{
+              margin: "0 auto",
+              backgroundColor: "#fff",
+              padding: "10px",
+            }}
           />
 
           <p style={{ fontSize: "12px", marginTop: "15px", color: "#FFD700" }}>
@@ -97,7 +101,7 @@ const QRCodeModal = ({ qrData, onClose }) => {
 
         <div className="flex justify-between mt-4">
           <button
-            // onClick={handleDownloadPDF}
+            onClick={handleDownloadPDF} // Fixed: Un-commented download function
             className="bg-blue-500 text-white px-4 py-2 rounded-lg"
           >
             Download

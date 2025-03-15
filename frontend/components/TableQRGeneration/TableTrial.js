@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-
+"use client";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import QRCodeModal from "./QRCodeModal";

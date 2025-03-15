@@ -1,5 +1,6 @@
-/* eslint-disable no-unused-vars */
-import React, { useState } from "react";
+"use client"; // Ensures it runs on the client in Next.js App Router
+
+import React from "react";
 import { Snackbar, Alert } from "@mui/material";
 
 const Notification = ({ message, severity, open, onClose }) => {
