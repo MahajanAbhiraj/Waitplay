@@ -66,7 +66,6 @@ export default function MyApp({ Component, pageProps }) {
       <div className="main-content flex-1">
         <Component {...pageProps} />
       </div>
-
       <ToastContainer position="top-center" />
     </div>
   );
