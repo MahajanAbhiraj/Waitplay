@@ -94,7 +94,7 @@ const TableManager = () => {
     axios
       .delete(`http://localhost:5000/api/tables/${selectedTableId}`)
       .then((res) => {
-        setTables(tables.filter((table) => table._id !== selectedTableId));
+        setTables(tables.filter((table) => table.id !== selectedTableId));
         setShowDeleteModal(false);
         setSelectedTableId(null);
         toast.success("Successfully Deleted Table");
