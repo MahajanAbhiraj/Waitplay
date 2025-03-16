@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -14,149 +8,132 @@ datasource db {
 }
 
 model Restaurant {
-  id              String            @id @default(auto()) @map("_id") @db.ObjectId
-  name            String
-  location        String?
-  Table           Table[]
-  Admin           Admin[]
-  Notification    Notification[]
-  RestaurantVisit RestaurantVisit[]
-  Orderlog        Orderlog[]
-  Rating          Rating[]
+  id      String   @id @default(auto()) @map("_id") @db.ObjectId
+  name     String
+  tables   String[]
+  menu     String[]
+  orders   String[]
+  location String
+
+  @@map("restaurants")
 }
 
 model Table {
-  id           String  @id @default(auto()) @map("_id") @db.ObjectId
-  tableId      Int
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  tableId      String
   description  String?
   restaurantId String
   qrData       String
-  isAvailable  Boolean @default(true)
+ version      Int @map("__v")
 
-  restaurant Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
-  Order      Order[]
-  Orderlog   Orderlog[]
-}
-
-model MenuItem {
-  id                  String   @id @default(auto()) @map("_id") @db.ObjectId // MongoDB ObjectId
-  title               String?
-  description         String?
-  detailedDescription String?
-  image               String?
-  isVeg               Boolean?
-  halfPrice           Float?
-  fullPrice           Float?
-  specialItems        String[]
-  category            String?
-  type                String?
-  prepTime            Int?
-}
-
-model OrderItem {
-  id         String    @id @default(auto()) @map("_id") @db.ObjectId
-  name       String?
-  price      Float?
-  quantity   Int?
-  Order      Order?    @relation(fields: [orderId], references: [id])
-  orderId    String?   @db.ObjectId
-  Orderlog   Orderlog? @relation(fields: [orderlogId], references: [id])
-  orderlogId String?   @db.ObjectId
-}
-
-model Requests {
-  id               String   @id @default(auto()) @map("_id") @db.ObjectId
-  tableNo          Int
-  tableDescription String?
-  restaurantId     String
-  restaurantName   String
-  time             DateTime @default(now())
-}
-
-model Admin {
-  id             String    @id @default(auto()) @map("_id") @db.ObjectId // MongoDB ObjectId
-  name           String
-  email          String    @unique
-  password       String
-  phoneNumber    String    @unique
-  location       String?
-  registeredDate DateTime?
-  restaurantName String?
-  restaurantId   String?
-  role           String
-
-  restaurant Restaurant? @relation(fields: [restaurantId], references: [id], onDelete: SetNull)
-}
-
-model Notification {
-  id           String     @id @default(auto()) @map("_id") @db.ObjectId
-  eventName    String
-  description  String
-  time         DateTime   @default(now()) // Equivalent to `default: Date.now`
-  read         Boolean    @default(false)
-  restaurantId String
-  restaurant   Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+  @@map("tables")
 }
 
 model Order {
-  id         String      @id @default(auto()) @map("_id") @db.ObjectId
-  tableId    String?
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  items      String[]
+  table      String
   totalPrice Float
-  items      OrderItem[]
 
-  table             Table?           @relation(fields: [tableId], references: [id], onDelete: SetNull)
-  RestaurantVisit   RestaurantVisit? @relation(fields: [restaurantVisitId], references: [id])
-  restaurantVisitId String?          @db.ObjectId
+  @@map("orders")
+}
+model Orderlog {
+  id         String      @id @default(auto()) @map("_id") @db.ObjectId
+  userid     String
+  table      String
+  items      OrderItem[] @relation("OrderItemsOnOrderlog")
+  totalPrice Float
+  createdAt  DateTime
+  orderType  String
+  resId      String @db.ObjectId
+  rating     String @db.ObjectId
+
+  @@map("orderlogs")
 }
 
 model User {
-  id               String            @id @default(auto()) @map("_id") @db.ObjectId // MongoDB ObjectId
+  id               String   @id @default(auto()) @map("_id") @db.ObjectId
   name             String
-  email            String            @unique
+  email            String  @unique
   password         String
-  mobileNumber     String            @unique
-  restaurantVisits RestaurantVisit[]
-  Orderlog         Orderlog[]
+  mobileNumber     String  @unique
+  restaurantVisits String[]
+
+  @@map("users")
 }
 
-model RestaurantVisit {
-  id           String     @id @default(auto()) @map("_id") @db.ObjectId
-  userId       String
-  restaurant   Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
-  restaurantId String
-  orders       Order[]
+model Admin {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  name           String
+  email          String  @unique
+  password       String
+  phoneNumber    String  @unique
+  location       String?
+  registeredDate DateTime?
+  restaurant_name String?
+  restaurant_id   String  @db.ObjectId
+  role           String
+  version      Int @map("__v")
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-}
-
-model Orderlog {
-  id         String    @id @default(auto()) @map("_id") @db.ObjectId
-  userid     String?
-  tableId    String?
-  totalPrice Float
-  createdAt  DateTime?
-  orderType  String
-  resId      String?
-  ratingId   String?
-
-  items OrderItem[]
-
-  user       User?       @relation(fields: [userid], references: [id], onDelete: SetNull)
-  table      Table?      @relation(fields: [tableId], references: [id], onDelete: SetNull)
-  restaurant Restaurant? @relation(fields: [resId], references: [id], onDelete: SetNull)
-  Rating     Rating[]
+  @@map("admins")
 }
 
 model Rating {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId // MongoDB ObjectId
-  orderId     String
-  resId       String
-  totalRating Int
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  orderId     String  @db.ObjectId
+  totalRating Float
   quality     Int
   service     Int
   pricing     Int
-  createdAt   DateTime @default(now())
+  createdAt   DateTime
+  resId       String  @db.ObjectId
+  version      Int @map("__v")
 
-  order      Orderlog   @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  restaurant Restaurant @relation(fields: [resId], references: [id], onDelete: Cascade)
+  @@map("ratings")
+}
+
+model MenuItem {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  title         String
+  description   String?
+  isVeg         Boolean @db.Bool
+  halfPrice     Float
+  fullPrice     Float
+  specialItems  String[]
+  category      String
+  prepTime      Int
+
+  @@map("menuitems")
+}
+
+model Requests {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  tableId      String
+  description  String?
+  restaurantId String
+  version      Int @map("__v")
+
+  @@map("requests")
+}
+
+model Notification {
+  id          String     @id @default(auto()) @map("_id") @db.ObjectId
+  eventName    String
+  description  String
+  time         DateTime   @default(now())
+  read         Boolean    @default(false)
+  restaurantId String
+
+  @@map("notifications")
+}
+
+model OrderItem {
+  id       String    @id @default(auto()) @map("_id") @db.ObjectId
+  name     String?
+  price    Float?
+  quantity Int?
+  orderlog Orderlog? @relation("OrderItemsOnOrderlog", fields: [orderlogId], references: [id]) // ✅ Correct relation
+  orderlogId String? @db.ObjectId
+
+  @@map("orderitems")
 }
