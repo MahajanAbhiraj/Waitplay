@@ -27,7 +27,6 @@ const SalesAverageOrder = ({ startDate,endDate,interval,calculationType }) => {
   const [revenueData, setRevenueData] = useState([]);
   const router = useRouter();
   const { id: restaurantId } = router.query;
-  console.log(startDate,endDate,interval,calculationType);
   useEffect(() => {
     const fetchRevenueData = async () => {
       try {
@@ -36,7 +35,6 @@ const SalesAverageOrder = ({ startDate,endDate,interval,calculationType }) => {
           { params: { startDate, endDate, interval, calculationType } }
         );
         setRevenueData(response.data);
-        console.log(response);
       } catch (error) {
         console.error("Error fetching revenue data:", error);
       }
