@@ -10,9 +10,7 @@
    - Once the order is placed, it is sent to the backend for processing.  
 4. **Real-Time Order Updates:** `/frontend/pages/[id]/orders.js`
    - Customers receive live updates about their order status (e.g., Confirmed, Preparing, Ready to Serve).  
-5. **Call to Waiter:**
-   - UI : `/frontend/pages/[id]/orders.js`
-   - logic : /backend/routes/userRoute.js`
+5. **Call to Waiter:** `/frontend/pages/[id]/orders.js` and `/backend/routes/userRoute.js`
    - Customers can request waiter assistance directly from their table interface.
    - Waiter calls are sent as real-time notifications to the restaurant staff.
 
