@@ -141,7 +141,7 @@ function Dashboard() {
 
 
   return (
-    <div className="h-screen bg-blue-950 text-white p-6 flex flex-col overflow-scroll">
+    <div className="h-screen bg-blue-950 text-white p-6 flex flex-col overflow-scroll scrollbar-thin scrollbar-thumb-green-400 scrollbar-track-blue-800">
        <div className="w-full flex items-center gap-6 justify-end">
             <FaSync
                 className="text-green-400 cursor-pointer hover:text-lime-400"
@@ -157,7 +157,7 @@ function Dashboard() {
       </div>
 
       {showComparePopup && (
-        <div className="fixed right-0 top-12 flex items-center justify-center bg-black bg-opacity-50">
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
           <div className="bg-blue-950 p-6 rounded-xl shadow-lg text-white w-96">
             <h2 className="text-lg font-semibold mb-4">Compare Dates</h2>
 
@@ -288,7 +288,7 @@ function Dashboard() {
                   size={20}
                   onClick={() => setShowRatingModal(true)}
                 />
-                 {showRatingModal && <RatingModal onClose={() => setShowRatingModal(false)} className=""/>}
+                 {showRatingModal && <RatingModal restaurantId={restaurantId} onClose={() => setShowRatingModal(false)} className=""/>}
             </div>
           </div>
           <h2 className="text-lg font-semibold mt-2">Total Statistics</h2>
@@ -296,10 +296,12 @@ function Dashboard() {
       </div>
       <div className="shadow-3xl bg-blue-900 rounded-md">
         {/* <div className="flex justify-end"> */}
-        <p className="mt-2 mr-2">
-          {format(startDate, "MMM dd yyyy")} -{format(endDate, "MMM dd yyyy")}{" "}
+        <p className="mt-2 font-bold text-green-300 text-center">
+          Date Range:{" "}
+          <span className="text-white">
+            {format(startDate, "MMM dd yyyy")} - {format(endDate, "MMM dd yyyy")}
+          </span>
         </p>
-        <p>hello</p>
         {/* </div> */}
         <DateSelect setStartDate={setStartDate} setEndDate={setEndDate} />
         <div className="row1 p-3">

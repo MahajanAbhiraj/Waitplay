@@ -47,7 +47,7 @@ const SideBar = ({ restaurantname }) => {
 
   return (
     <div
-      className={`flex flex-col h-screen ${isCollapsed ? "w-20" : "w-64"} 
+      className={`flex flex-col h-screen ${isCollapsed ? "w-20" : "w-60"} 
       bg-gradient-to-b from-blue-800 to-purple-700 text-white transition-all duration-300`}
     >
       <div className="flex justify-between items-center p-3">
