@@ -71,9 +71,8 @@ model Admin {
   location       String?
   registeredDate DateTime?
   restaurant_name String?
-  restaurant_id   String  @db.ObjectId
+  restaurant_id   String?  @db.ObjectId
   role           String
-  version      Int @map("__v")
 
   @@map("admins")
 }
@@ -111,7 +110,7 @@ model Requests {
   tableId      String
   description  String?
   restaurantId String
-  version      Int @map("__v")
+  version      Int? @map("__v")
 
   @@map("requests")
 }

@@ -5,13 +5,13 @@ import { useRouter } from "next/router";
 import "react-datepicker/dist/react-datepicker.css";
 import { format } from "date-fns";
 import { FiTrendingUp } from "react-icons/fi";
-import { FaChevronDown, FaSlidersH } from "react-icons/fa";
+import { FaChevronDown, FaSlidersH, FaInfoCircle , FaSync} from "react-icons/fa";
 import axios from "axios";
 import SalesChart from "@/components/SalesChart";
 import RevenueChart from "@/components/RevenueChart";
 import SalesAverageOrder from "@/components/SalesAverageOrder";
 import DateSelect from "@/components/DatePicker";
-
+import RatingModal from "@/components/RatingModal";
 
 function Dashboard() {
   const router = useRouter();
@@ -22,6 +22,10 @@ function Dashboard() {
     avgOrderValue: 0,
     revenueSplit: { dineIn: 0, delivery: 0, takeOut: 0 },
     topSellingItems: [],
+    overallRating : 0,
+    customers:0,
+    existingCustomers:0,
+    newCustomers:0,
   });
 
   const today = new Date();
@@ -35,12 +39,53 @@ function Dashboard() {
   const [eD2, seteD2] = useState(today);
   const [isExpanded, setIsExpanded] = useState(false);
   const [showComparePopup, setShowComparePopup] = useState(false);
+  const [selectedLabel1, setSelectedLabel1] = useState(""); 
+  const [selectedLabel2, setSelectedLabel2] = useState("Last Month"); 
+  const [showRatingModal, setShowRatingModal] = useState(false);
+  const handleYearChange = (e) => {
+    setSelectedYear(e.target.value);
+  };
+  const [orderComparison, setOrderComparison] = useState(null);
+  const [revenueComparison, setRevenueComparison] = useState(null);
+  const [customerComparison, setCustomerComparison] = useState(null);
+  const [ratingComparison, setRatingComparison] = useState(null);
+  const [showStats, setShowStats] = useState(false);
+
+  
+  const handleCompare = async () => {
+    try {
+      console.log(restaurantId);
+      const response = await axios.post("http://localhost:5000/dashboard-metrics/compare-orders", {
+        startDate1: format(sD1, "yyyy-MM-dd"),
+        endDate1: format(eD1, "yyyy-MM-dd"),
+        startDate2: format(sD2, "yyyy-MM-dd"),
+        endDate2: format(eD2, "yyyy-MM-dd"),
+        restaurantId: restaurantId, 
+      });
+  
+      setOrderComparison(response.data.orderDifference); 
+      setRevenueComparison(response.data.revenueDifference);
+      setCustomerComparison(response.data.customerDifference);
+      setRatingComparison(response.data.ratingDifference); 
+      setShowComparePopup(false); 
+      dashboardData.totalOrders = response.data.ordersCount1;
+      dashboardData.totalRevenue = response.data.totalRevenue1;
+      dashboardData.customers = response.data.customers1;
+      dashboardData.overallRating = response.data.avgRating1;
+      dashboardData.existingCustomers = response.data.existingCustomers;
+      dashboardData.newCustomers = response.data.newCustomers;
+      
+    } catch (error) {
+      console.error("Error comparing orders:", error);
+    }
+  };
+
 
   useEffect(() => {
-    if (!restaurantId) return;
 
     const fetchDashboardData = async () => {
       try {
+        console.log(restaurantId);
         const response = await axios.get(
           `http://localhost:5000/dashboard-metrics/${restaurantId}`
         );
@@ -53,15 +98,64 @@ function Dashboard() {
     fetchDashboardData();
   }, [restaurantId]);
 
+  
+  useEffect(() => {
+    const compareCurrentVsLastMonth = async () => {
+      const now = new Date();
+      const startCurrentMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+      const endCurrentMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59);
+      
+      const startLastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+      const endLastMonth = new Date(now.getFullYear(), now.getMonth(), 0, 23, 59, 59);
+
+      try {
+        const response = await axios.post("http://localhost:5000/dashboard-metrics/compare-orders", {
+          startDate1: format(startCurrentMonth, "yyyy-MM-dd"),
+          endDate1: format(endCurrentMonth, "yyyy-MM-dd"),
+          startDate2: format(startLastMonth, "yyyy-MM-dd"),
+          endDate2: format(endLastMonth, "yyyy-MM-dd"),
+          restaurantId: restaurantId, 
+        });
+
+        setOrderComparison(response.data.orderDifference);
+        setRevenueComparison(response.data.revenueDifference);
+        setCustomerComparison(response.data.customerDifference);
+        setRatingComparison(response.data.ratingDifference);
+      } catch (error) {
+        console.error("Error comparing orders:", error);
+      }
+    };
+
+    compareCurrentVsLastMonth();
+  }, [restaurantId]);
+
+  const clearFilters = () => {
+
+  }
+  
+  const handleRefresh = () => {
+    window.location.reload(); 
+  };
+
+  const customerStats = () => {
+    setShowStats(true);
+  }
+
+
   return (
     <div className="h-screen bg-blue-950 text-white p-6 flex flex-col overflow-scroll">
-      <div className="w-full flex justify-end">
-        <button
-          className="bg-green-400 rounded-xl p-2 pl-2 text-black text-xs"
-          onClick={() => setShowComparePopup(true)}
-        >
-          Compare
-        </button>
+       <div className="w-full flex items-center gap-6 justify-end">
+            <FaSync
+                className="text-green-400 cursor-pointer hover:text-lime-400"
+                size={20}
+                onClick={handleRefresh}
+            />
+            <button 
+              className="bg-green-400 rounded-md p-2 pl-2 text-black text-sm" 
+              onClick={() => setShowComparePopup(true)}
+            >
+              Compare
+            </button>
       </div>
 
       {showComparePopup && (
@@ -79,7 +173,7 @@ function Dashboard() {
                 <div>SD:{format(sD1, "dd-MM-yy")}</div>
                 <div>ED:{format(eD1, "dd-MM-yy")}</div>
               </div>
-              <span className="text-lg font-bold mx-4">VS</span>
+              <span className="text-lg font-bold mx-4"></span>
               <div>
                 <DateSelect
                   setStartDate={setsD2}
@@ -102,6 +196,7 @@ function Dashboard() {
                 className="bg-green-500 px-4 py-2 rounded-md text-black text-xs"
                 onClick={() => {
                   setShowComparePopup(false);
+                  handleCompare();
                 }}
               >
                 Compare
@@ -113,30 +208,89 @@ function Dashboard() {
 
       <div className="row0 p-3">
         <div>
-          <div className="box revbox grid grid-cols-4 gap-4">
-            <div className="revin">
+        <div className="box revbox grid grid-cols-4 gap-4">
+          <div className="revin flex items-center relative">
               <p className="text-2xl font-bold text-lime-300">
-                {dashboardData.revenueSplit.dineIn}
+                {dashboardData.totalOrders}
               </p>
               <p className="text-lg inline-flex items-center">Orders</p>
+              
+              {orderComparison !== null && (
+                <span className={`absolute bottom-2 left-1 text-base font-bold ${orderComparison >= 0 ? "text-green-400" : "text-red-500"}`}>
+                  {orderComparison >= 0 ? `+${orderComparison}` : orderComparison} from {selectedLabel2}
+                </span>
+              )}
             </div>
-            <div className="revin">
+
+            <div className="revin relative">
               <p className="text-2xl font-bold text-lime-300">
-                {dashboardData.revenueSplit.delivery}
+              ₹{dashboardData.totalRevenue}
               </p>
               <p className="text-lg inline-flex items-center">Revenue</p>
+
+              {revenueComparison !== null && (
+                <span className={`absolute bottom-2 left-1 text-base font-bold ${revenueComparison >= 0 ? "text-green-400" : "text-red-500"}`}>
+                  {revenueComparison >= 0 ? `+${revenueComparison}` : revenueComparison} from {selectedLabel2}
+                </span>
+              )}
             </div>
-            <div className="revin">
+            <div className="revin relative">
               <p className="text-2xl font-bold text-lime-300">
-                {dashboardData.revenueSplit.takeOut}
+                {dashboardData.customers}
               </p>
               <p className="text-lg inline-flex items-center">Customers</p>
+              {customerComparison !== null && (
+                <span className={`absolute bottom-2 left-1 text-base font-bold ${customerComparison >= 0 ? "text-green-400" : "text-red-500"}`}>
+                  {customerComparison >= 0 ? `+${customerComparison}` : customerComparison} from {selectedLabel2}
+                </span>
+              )}
+
+          <div 
+            className="inline-block" 
+            onMouseEnter={() => setShowStats(true)}
+            onMouseLeave={() => setShowStats(false)}
+          >
+          <FaInfoCircle
+            className="absolute bottom-2 right-2 text-lime-300 cursor-pointer hover:text-lime-400"
+            size={20}
+          />
+               {showStats && (
+        <div className="absolute -bottom-20 right-2 bg-gray-900 text-white p-3 rounded-lg shadow-lg flex items-center justify-center w-48">
+          <div className="flex-1 text-center">
+            <p className="text-lg font-bold">{dashboardData.existingCustomers}</p>
+            <p className="text-sm text-gray-300">Existing</p>
+          </div>
+
+          <div className="border-l border-gray-500 h-10 mx-3"></div>
+
+          <div className="flex-1 text-center">
+            <p className="text-lg font-bold">{dashboardData.newCustomers}</p>
+            <p className="text-sm text-gray-300">New</p>
+          </div>
+        </div>
+         )}
+        </div>
+  
             </div>
-            <div className="revin">
+            
+            <div className="revin relative">
               <p className="text-2xl font-bold text-lime-300">
-                {dashboardData.revenueSplit.takeOut}
+                  {dashboardData.overallRating}
               </p>
               <p className="text-lg inline-flex items-center">Rating</p>
+
+              {ratingComparison !== null && (
+                <span className={`absolute bottom-2 left-1 text-base font-bold ${ratingComparison >= 0 ? "text-green-400" : "text-red-500"}`}>
+                  {ratingComparison >= 0 ? `+${ratingComparison}` : ratingComparison} from {selectedLabel2}
+                </span>
+              )}
+
+              <FaInfoCircle
+                  className="absolute bottom-2 right-2 text-lime-300 cursor-pointer hover:text-lime-400"
+                  size={20}
+                  onClick={() => setShowRatingModal(true)}
+                />
+                 {showRatingModal && <RatingModal onClose={() => setShowRatingModal(false)} className=""/>}
             </div>
           </div>
           <h2 className="text-lg font-semibold mt-2">Total Statistics</h2>
@@ -157,7 +311,7 @@ function Dashboard() {
                 <div className="flex flex-col mr-4 ml-2">
                   <span className="text-3xl font-bold mt-0.5 text-lime-300">
                     {" "}
-                    ₹{dashboardData.totalOrders}
+                    {dashboardData.totalOrders}
                   </span>
                   <p className="text-2xl">Last hour</p>
                 </div>

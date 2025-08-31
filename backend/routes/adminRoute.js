@@ -64,8 +64,8 @@ router.post("/", async (req, res) => {
           password: hashedPassword,
           location,
           restaurant_name,
-          restaurantId: newRestaurant.id,
           registeredDate: new Date(),
+          restaurant_id: newRestaurant.id,
           role,
         },
       });

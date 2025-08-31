@@ -1,5 +1,6 @@
 import express from "express";
 import { PrismaClient } from "@prisma/client";
+import { ObjectId } from "mongodb"; // ✅ Import ObjectId
 
 const prisma = new PrismaClient();
 const router = express.Router();
@@ -165,7 +166,7 @@ router.post("/compare-orders", async (req, res) => {
 router.get("/ratings/:restaurantId", async (req, res) => {
   try {
     const { restaurantId } = req.params;
-
+    console.log("IN rating backend api : ",restaurantId);
     const ratings = await prisma.rating.findMany({
       where: { resId: restaurantId },
     });
@@ -183,8 +184,11 @@ router.get("/ratings/:restaurantId", async (req, res) => {
 router.get("/sales1/:restaurantId", async (req, res) => {
   try {
     const { restaurantId } = req.params;
+    console.log("in backend sales1 api: ",restaurantId);
     let { startDate, endDate, interval, calculationType } = req.query;
-
+    if (!Date.parse(startDate) || !Date.parse(endDate)) {
+      return res.status(400).json({ message: "Invalid date format" });
+    }
     // Convert string dates to Date objects
     startDate = new Date(startDate);
     endDate = new Date(endDate);
@@ -193,7 +197,6 @@ router.get("/sales1/:restaurantId", async (req, res) => {
       return res.status(400).json({ message: "Invalid date format" });
     }
 
-    // Define the groupBy format based on the interval (daily, weekly, monthly)
     let dateFormat = "YYYY-MM"; // Default: monthly
     if (interval === "daily") {
       dateFormat = "YYYY-MM-DD";

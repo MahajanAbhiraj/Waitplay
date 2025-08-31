@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcrypt";
 import express from "express";
-
+import { io } from "../index.js";
 const prisma = new PrismaClient();
 const router = express.Router();
 
@@ -119,5 +119,54 @@ router.get("/visit-details/:userId", async (req, res) => {
     res.status(500).json({ message: "Internal server error." });
   }
 });
+
+router.post("/:restaurantId/call-waiter", async (req, res) => {
+  try {
+    const { tableObjId, description } = req.body;
+    const { restaurantId } = req.params;
+
+    if (!tableObjId) {
+      return res.status(400).json({ message: "Table ID is required" });
+    }
+
+    const request = await prisma.requests.create({
+      data: {
+        tableId: tableObjId,
+        restaurantId,
+        description: description || "Customer is calling the waiter",
+        version: 0,  
+      },
+    });
+
+    const table = await prisma.table.findUnique({ 
+      where: { id: tableObjId } 
+  });
+  
+  const tableId = table?.tableId;
+
+    const notification = await prisma.notification.create({
+      data: {
+        eventName: "Waiter Call",
+        description: `Table ${tableId} is calling a waiter.`,
+        restaurantId,
+        time: new Date(),
+      },
+    });
+
+    io.emit("waiter-called", { 
+      tableId, 
+      restaurantId, 
+      description: `Table ${tableId} is calling a waiter.`,
+      time: new Date(),
+      eventName: "Waiter Call",
+  });
+
+    res.status(201).json({ message: "Waiter called successfully", request, notification });
+  } catch (error) {
+    console.error("Error calling waiter:", error);
+    res.status(500).json({ message: "Internal Server Error", error });
+  }
+});
+
 
 export default router;

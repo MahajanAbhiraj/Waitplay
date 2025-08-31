@@ -17,8 +17,8 @@ export default function MyApp({ Component, pageProps }) {
   const router = useRouter();
   const [restaurant, setRestaurant] = useState(null);
   const [role, setRole] = useState(null);
-  const [loading, setLoading] = useState(true); // Fix hydration issue
-  const [token, setToken] = useState(null); // Fix localStorage issue
+  const [loading, setLoading] = useState(true); 
+  const [token, setToken] = useState(null); 
 
   useEffect(() => {
     const storedToken = typeof window !== "undefined" ? localStorage.getItem("token") : null;

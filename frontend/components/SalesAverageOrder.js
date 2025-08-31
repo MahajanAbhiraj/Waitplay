@@ -26,10 +26,11 @@ const data1 = [
 const SalesAverageOrder = ({ startDate,endDate,interval,calculationType }) => {
   const [revenueData, setRevenueData] = useState([]);
   const router = useRouter();
-  const { id: restaurantId } = router.query;
+  const {id:restaurantId} = router.query;
   useEffect(() => {
     const fetchRevenueData = async () => {
       try {
+        console.log("In sales average order: ", restaurantId);
         const response = await axios.get(
           `http://localhost:5000/dashboard-metrics/sales1/${restaurantId}`,
           { params: { startDate, endDate, interval, calculationType } }

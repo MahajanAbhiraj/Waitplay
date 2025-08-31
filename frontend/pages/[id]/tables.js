@@ -91,9 +91,12 @@ const TableManager = () => {
   };
 
   const confirmDeleteTable = () => {
+    console.log('delete button clicked');
+    console.log(selectedTableId);
     axios
-      .delete(`http://localhost:5000/api/tables/${selectedTableId}`)
+      .delete(`http://localhost:5000/api/tables/${selectedTableId}.trim()`)
       .then((res) => {
+        console.log(res);
         setTables(tables.filter((table) => table.id !== selectedTableId));
         setShowDeleteModal(false);
         setSelectedTableId(null);
@@ -141,7 +144,7 @@ const TableManager = () => {
                 <FaTrash
                   size={14}
                   color="lightcoral"
-                  onClick={() => handleDeleteTable(table._id)}
+                  onClick={() => handleDeleteTable(table.id)}
                 />
               </div>
             </li>
