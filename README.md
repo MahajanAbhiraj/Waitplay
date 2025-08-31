@@ -25,7 +25,7 @@
 3. **Menu Management:** `/frontend/pages/[id]/menu.js` and `/backend/routes/menuRoute.js`
    - Dynamic menu system allowing restaurants to add, edit, and remove menu items.
    - Real-time menu updates reflect instantly on customer interfaces.
-4. **Analytics & Comparison Features:** `/frontend/pages/id]/dashboard.js` and `/backend/routes/dashboardRoute.js`
+4. **Analytics & Comparison Features:** `/frontend/pages/[id]/dashboard.js` and `/backend/routes/dashboardRoute.js`
    - Comprehensive dashboard showing key metrics (orders, revenue, customers, ratings).
    - Period-over-period comparison functionality (compare with previous month/week/day).
    - Filter-based analytics allowing date range selection for detailed insights.
