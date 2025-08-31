@@ -6,7 +6,6 @@ import html2canvas from "html2canvas";
 import { jsPDF } from "jspdf";
 
 const QRCodeModal = ({ qrData, onClose }) => {
-  console.log(qrData);
   const contentRef = useRef(null);
 
   const extractTableId = (qrData) => {

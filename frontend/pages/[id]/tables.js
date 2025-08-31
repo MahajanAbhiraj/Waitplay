@@ -86,17 +86,13 @@ const TableManager = () => {
 
   const handleDeleteTable = (tableId) => {
     setSelectedTableId(tableId);
-    console.log("Selected table ID:", tableId);
     setShowDeleteModal(true);
   };
 
   const confirmDeleteTable = () => {
-    console.log('delete button clicked');
-    console.log(selectedTableId);
     axios
       .delete(`http://localhost:5000/api/tables/${selectedTableId}.trim()`)
       .then((res) => {
-        console.log(res);
         setTables(tables.filter((table) => table.id !== selectedTableId));
         setShowDeleteModal(false);
         setSelectedTableId(null);

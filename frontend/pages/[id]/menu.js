@@ -137,7 +137,6 @@ const Menu = () => {
   
     const formData = new FormData();
     formData.append("file", file);
-    console.log('frontend request');
     try {
       const response = await axios.post("http://localhost:5000/menu/uploadExcel", formData, {
         headers: {
@@ -189,11 +188,14 @@ const Menu = () => {
             key={item._id}
             className="bg-white shadow-md rounded-lg p-4 flex flex-col items-center"
           >
-            <img
-              src={`http://localhost:5000${item.image}`}
-              alt={item.title}
-              className="w-full h-40 object-cover rounded-md mb-4"
-            />
+            {item?.image && (
+              <img
+                src={`http://localhost:5000${item.image}`}
+                alt={item.title || "Image"}
+                className="w-full h-40 object-cover rounded-md mb-4"
+              />
+            )}
+
             <h3 className="text-lg font-bold">{item.title}</h3>
             <p className="text-sm text-gray-600">{item.description}</p>
             <p className="text-sm font-semibold">₹{item.fullPrice} (Full)</p>

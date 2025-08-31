@@ -28,7 +28,6 @@ function UsersPage() {
       const response = await fetch(`http://localhost:5000/users/visit-details/${userId}`);
       if (response.ok) {
         const data = await response.json();
-        console.log(data);
         setVisitDetails(data.visitDetails);
         setShowVisitModal(true);
       } else {

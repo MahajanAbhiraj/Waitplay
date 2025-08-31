@@ -1,8 +1,8 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-import { Server } from "socket.io";  // ✅ Import Socket.IO
-import http from "http";  // ✅ Import HTTP module
+import { Server } from "socket.io";  
+import http from "http";  
 import prisma from "./prismaClient.js";
 import userRoute from "./routes/userRoute.js"; 
 import adminRoute from "./routes/adminRoute.js";
@@ -11,12 +11,16 @@ import tableRoute from "./routes/tableRoute.js";
 import orderRoute from "./routes/orderRoute.js";
 import menuRoute from "./routes/menuRoute.js";
 import notificationRoute from "./routes/notificationRoute.js";
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 dotenv.config();
 const app = express();
-const server = http.createServer(app);  // ✅ Create HTTP server
+const server = http.createServer(app); 
 
-// ✅ Initialize Socket.IO with CORS enabled
 const io = new Server(server, {
   cors: {
     origin: "*", // Allow all origins (Change this if needed)
@@ -24,7 +28,6 @@ const io = new Server(server, {
   },
 });
 
-// ✅ Handle new connections
 io.on("connection", (socket) => {
   console.log("A user connected:", socket.id);
 
@@ -33,11 +36,9 @@ io.on("connection", (socket) => {
   });
 });
 
-// ✅ Middleware
 app.use(cors());
 app.use(express.json());
 
-// ✅ Connect to MongoDB using Prisma
 async function connectDB() {
   try {
     await prisma.$connect();
@@ -49,26 +50,23 @@ async function connectDB() {
 }
 connectDB();
 
-// ✅ API Routes
 app.use("/api", tableRoute);
 app.use("/orders", orderRoute);
 app.use("/superadmin", adminRoute);
 app.use("/menu", menuRoute);
-app.use("/uploads", express.static("uploads"));
 app.use("/users", userRoute);
 app.use("/notifications", notificationRoute);
 app.use("/dashboard-metrics", dashboardRoute);
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-// ✅ Test Route
 app.get("/", (req, res) => {
   res.send("Hello from Node.js backend with Prisma & WebSockets!");
 });
 
 const PORT = process.env.PORT || 5000;
 
-// ✅ Start the server
 server.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
 
-export { app, io, server }; // ✅ Export io so other files can use it
+export { app, io, server }; 

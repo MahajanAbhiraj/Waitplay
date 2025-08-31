@@ -58,8 +58,6 @@ router.post('/join-cart', async (req, res) => {
 
 // Add an item to the cart
 router.post('/cart/:cartId/add-item', (req, res) => {
-    console.log('Request received with cartId:', req.params.cartId);
-    console.log('Request body:', req.body);
     res.status(200).json({ message: 'Request successful' });
 });
 

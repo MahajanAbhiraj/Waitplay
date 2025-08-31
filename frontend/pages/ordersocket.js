@@ -32,7 +32,6 @@ function OrdersSocket() {
     });
 
     socket.on("newOrder", (newOrder) => {
-      console.log(" NEW ORDER RECEIVED");
       toast.success(`New order received on Table ${newOrder.table.tableId}`);
       setOrders((prevOrders) => [...prevOrders, newOrder]);
     });

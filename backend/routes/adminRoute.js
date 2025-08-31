@@ -206,7 +206,6 @@ router.post("/login", async (req, res) => {
       restaurant_id: admin.restaurant_id,
     });
   } catch (error) {
-    console.log(error);
     res.status(500).json({ message: `Internal server error: ${error.message}` });
   }
 });

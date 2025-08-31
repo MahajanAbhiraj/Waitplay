@@ -10,7 +10,6 @@ function RestaurantPage() {
     axios
       .get("http://localhost:5000/superadmin/restaurants")
       .then((response) => {
-        console.log(response.data.data);
         setRestaurants(response.data.data);
         setLoading(false);
       })

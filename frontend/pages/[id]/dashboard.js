@@ -54,7 +54,6 @@ function Dashboard() {
   
   const handleCompare = async () => {
     try {
-      console.log(restaurantId);
       const response = await axios.post("http://localhost:5000/dashboard-metrics/compare-orders", {
         startDate1: format(sD1, "yyyy-MM-dd"),
         endDate1: format(eD1, "yyyy-MM-dd"),
@@ -85,7 +84,6 @@ function Dashboard() {
 
     const fetchDashboardData = async () => {
       try {
-        console.log(restaurantId);
         const response = await axios.get(
           `http://localhost:5000/dashboard-metrics/${restaurantId}`
         );

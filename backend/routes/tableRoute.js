@@ -33,12 +33,10 @@ router.delete("/tables/:tableId", async (req, res) => {
     if (!deletedTable) {
       return res.status(404).json({ message: "Table not found." });
     }
-    console.log(deletedTable);
     await prisma.restaurant.update({
       where: { id: deletedTable.restaurantId },
       data: { tables: { disconnect: [{ id: tableId }] } },
     });
-    console.log('table deleted');
     res.json({ message: "Table deleted successfully.", table: deletedTable });
   } catch (error) {
     res.status(500).json({ message: "Server error." });

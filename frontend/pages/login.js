@@ -9,7 +9,6 @@ function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
-  console.log("REY");
   const handleSubmit = async (e) => {
     e.preventDefault();
 

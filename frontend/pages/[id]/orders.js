@@ -69,12 +69,10 @@ const Orders = () => {
   };
 
   const handleTableClick = (tableId) => {
-    console.log("Table clicked:", tableId);
     setSelectedTable(tableId);
     axios
       .get(`http://localhost:5000/orders/fetchOrder/${tableId}`)
       .then((res) => {
-        console.log("Bill Details:", res.data);
         setBillDetails(res.data);
       })
       .catch((err) => {

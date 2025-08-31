@@ -7,7 +7,7 @@ const RatingModal = ({ onClose }) => {
   const [ratings, setRatings] = useState(null);
   const searchParams = useSearchParams();
    const router = useRouter();
-  const {id: restaurantId} = router.query // ✅ Correct way to get query params in Next.js 13+
+  const {id: restaurantId} = router.query 
 
   useEffect(() => {
     if (restaurantId) {

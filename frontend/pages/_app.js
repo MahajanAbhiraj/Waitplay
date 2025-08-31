@@ -22,7 +22,6 @@ export default function MyApp({ Component, pageProps }) {
 
   useEffect(() => {
     const storedToken = typeof window !== "undefined" ? localStorage.getItem("token") : null;
-    console.log("hello");
 
     if (!storedToken || isTokenExpired(storedToken)) {
       localStorage.removeItem("token");

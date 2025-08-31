@@ -22,7 +22,6 @@ const TableTrial = () => {
     axios
       .get("http://localhost:5000/api/tables")
       .then((res) => {
-        console.log("API Response:", res.data);
         if (Array.isArray(res.data)) {
           setTables(res.data);
         } else {
@@ -58,7 +57,6 @@ const TableTrial = () => {
 
   const handleDeleteTable = (tableId) => {
     setSelectedTableId(tableId);
-    console.log("Selected table ID:", tableId);
     setShowDeleteModal(true);
   };
 

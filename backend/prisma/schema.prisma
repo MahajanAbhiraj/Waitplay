@@ -95,6 +95,7 @@ model MenuItem {
   id           String   @id @default(auto()) @map("_id") @db.ObjectId
   title         String
   description   String?
+  image         String?
   isVeg         Boolean @db.Bool
   halfPrice     Float
   fullPrice     Float

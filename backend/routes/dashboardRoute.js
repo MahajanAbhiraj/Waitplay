@@ -1,6 +1,6 @@
 import express from "express";
 import { PrismaClient } from "@prisma/client";
-import { ObjectId } from "mongodb"; // ✅ Import ObjectId
+import { ObjectId } from "mongodb";
 
 const prisma = new PrismaClient();
 const router = express.Router();
@@ -166,7 +166,6 @@ router.post("/compare-orders", async (req, res) => {
 router.get("/ratings/:restaurantId", async (req, res) => {
   try {
     const { restaurantId } = req.params;
-    console.log("IN rating backend api : ",restaurantId);
     const ratings = await prisma.rating.findMany({
       where: { resId: restaurantId },
     });
@@ -184,7 +183,6 @@ router.get("/ratings/:restaurantId", async (req, res) => {
 router.get("/sales1/:restaurantId", async (req, res) => {
   try {
     const { restaurantId } = req.params;
-    console.log("in backend sales1 api: ",restaurantId);
     let { startDate, endDate, interval, calculationType } = req.query;
     if (!Date.parse(startDate) || !Date.parse(endDate)) {
       return res.status(400).json({ message: "Invalid date format" });
